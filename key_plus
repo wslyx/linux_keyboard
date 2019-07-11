@@ -1,0 +1,41 @@
+#include<unistd.h>
+#include<fcntl.h>
+#include<stdlib.h>
+#include<curses.h>
+
+#define LOCAL_ESCAPE_KEY 27
+
+int main()
+{
+	int key;
+
+	int flag;
+	flag = fcntl(0,F_GETFL);
+	fcntl(0,F_SETFL,flag|O_NONBLOCK);
+
+	initscr();
+	crmode();
+	keypad(stdscr,TRUE);
+
+	noecho();
+	raw();
+	clear();
+	mvprintw(5,5,"Key pad demonstration.Press 'q' to quit");
+	move(7,5);
+	refresh();
+	key = getch();
+
+	//while(key !=ERR && key !='q')
+    while(key !='q')
+	{
+		move(7,5);
+		clrtoeol();
+		printw("Number: %d",key);
+        usleep(30000);//perfact value
+		refresh();
+		key = getch();
+	}//while
+	
+	endwin();
+	exit(EXIT_SUCCESS);
+}
